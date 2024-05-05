@@ -1,15 +1,14 @@
 <script setup>
 import ViewNotes from '@/views/ViewNotes.vue'
 import ViewStats from '@/views/ViewStats.vue'
+import NavBar from '@/components/layout/NavBar.vue'
 </script>
 
 <template>
-  <router-link class="button" to="/">notes</router-link>
-  <router-link class="button" to="/stats">stats</router-link>
-
+  <nav-bar></nav-bar>
   <router-view />
 </template>
 
-<style scoped>
-@import url('bulma/css/bulma.min.css');
+<style>
+@import 'bulma/css/bulma.css';
 </style>
