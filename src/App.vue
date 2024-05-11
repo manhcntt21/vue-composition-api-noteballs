@@ -1,14 +1,15 @@
 <script setup>
-import ViewNotes from '@/views/ViewNotes.vue'
-import ViewStats from '@/views/ViewStats.vue'
-import NavBar from '@/components/layout/NavBar.vue'
+import NavBar from "@/components/layout/NavBar.vue";
 </script>
 
 <template>
   <nav-bar></nav-bar>
-  <router-view />
+  <div class="container is-max-desktop px-2 py-4">
+    <router-view />
+  </div>
 </template>
 
 <style>
-@import 'bulma/css/bulma.css';
+@import "bulma/css/bulma.min.css";
+
 </style>
