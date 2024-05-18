@@ -9,7 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/components": "^10.9.0",
+    "@vueuse/core": "^10.9.0",
     "bulma": "^0.9.3",
+    "pinia": "^2.1.7",
     "puma": "^4.0.0",
     "uuid": "^9.0.1",
     "vue": "^3.4.21",
