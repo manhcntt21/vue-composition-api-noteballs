@@ -12,10 +12,10 @@ import {
   query,
   addDoc,
 } from "firebase/firestore";
-
-const notesCollectionRef = collection(db, "notes");
-const notesCollectionQuery = query(notesCollectionRef, orderBy("date", "desc"));
-
+import { useStoreAuth } from "@/stores/storeAuth"; 
+let notesCollectionRef;
+let notesCollectionQuery;
+let getNotesSnapshot = null
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
     return {
@@ -25,6 +25,22 @@ export const useStoreNotes = defineStore("storeNotes", {
   },
 
   actions: {
+    init() {
+      const storeAuth = useStoreAuth();
+      // console.log(storeAuth.user.id);
+      notesCollectionRef = collection(
+        db,
+        "users",
+        storeAuth.user.id,
+        "notes"
+      );
+      notesCollectionQuery = query(
+        notesCollectionRef,
+        orderBy("date", "desc")
+      );
+      // initailize the our database refs
+      this.fetchNotes();
+    },
     async addNote(newNodeContent) {
       // this.notes.unshift({
       //   id: uuidv4(),
@@ -69,7 +85,8 @@ export const useStoreNotes = defineStore("storeNotes", {
       //   this.notes.push(note);
       // });
       this.notesLoaded = false;
-      onSnapshot(notesCollectionQuery, (querySnapshot) => {
+      if(getNotesSnapshot) getNotesSnapshot(); // unscribe the previous listener
+      getNotesSnapshot = onSnapshot(notesCollectionQuery, (querySnapshot) => {
         let notes = [];
         querySnapshot.forEach((doc) => {
           let note = {
@@ -84,7 +101,11 @@ export const useStoreNotes = defineStore("storeNotes", {
         this.notesLoaded = true;
       });
     },
-    // later, want to stop listening to changes
+    
+
+    clearNotes() {
+      this.notes = [];
+    }
   },
   getters: {
     getNoteContentById: (state) => {
