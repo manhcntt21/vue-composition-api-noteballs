@@ -20,7 +20,7 @@
     <modal-delete-note 
       v-if="modals.deleteNote" 
       v-model="modals.deleteNote"
-      :noteID="note.id"
+      :noteId="note.id"
       />
   </div>
 

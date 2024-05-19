@@ -30,7 +30,7 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
-  nodeId: { type: String, required: true },
+  noteId: { type: String, required: true },
 });
 
 const emit = defineEmits(["update:modelValue"]);
