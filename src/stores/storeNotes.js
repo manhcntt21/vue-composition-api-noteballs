@@ -1,7 +1,9 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/js/firebase";
-import { collection, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, setDoc, doc } from "firebase/firestore";
+
+const notesCollectionRef = collection(db, 'notes')
 
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
@@ -11,10 +13,13 @@ export const useStoreNotes = defineStore("storeNotes", {
   },
 
   actions: {
-    addNote(newNodeContent) {
-      this.notes.unshift({
-        id: uuidv4(),
-        content: newNodeContent,
+    async addNote(newNodeContent) {
+      // this.notes.unshift({
+      //   id: uuidv4(),
+      //   content: newNodeContent,
+      // });
+      await setDoc(doc(notesCollectionRef, uuidv4()), {
+        content: newNodeContent
       });
     },
 
@@ -46,7 +51,7 @@ export const useStoreNotes = defineStore("storeNotes", {
       //   this.notes.push(note);
       // });
 
-      onSnapshot(collection(db, 'notes'), (querySnapshot) => {
+      onSnapshot(notesCollectionRef, (querySnapshot) => {
         let notes = [];
         querySnapshot.forEach((doc) => {
           let note = {
