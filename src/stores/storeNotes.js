@@ -1,9 +1,16 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/js/firebase";
-import { collection, onSnapshot, setDoc, doc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  onSnapshot,
+  setDoc,
+  doc,
+  deleteDoc,
+  updateDoc,
+} from "firebase/firestore";
 
-const notesCollectionRef = collection(db, 'notes')
+const notesCollectionRef = collection(db, "notes");
 
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
@@ -19,7 +26,7 @@ export const useStoreNotes = defineStore("storeNotes", {
       //   content: newNodeContent,
       // });
       await setDoc(doc(notesCollectionRef, uuidv4()), {
-        content: newNodeContent
+        content: newNodeContent,
       });
     },
 
@@ -34,11 +41,11 @@ export const useStoreNotes = defineStore("storeNotes", {
     //   const note = this.notes.find((note) => note.id === id);
     //   //   note.content = content;
     // },
-    updateNoteContentById(playload) {
-      const note = this.notes.find((note) => note.id === playload.id);
-      if (note) {
-        note.content = playload.content;
-      }
+    async updateNoteContentById(playload) {
+      // const note = this.notes.find((note) => note.id === playload.id);
+      await updateDoc(doc(notesCollectionRef, playload.id), {
+        content: playload.content,
+      });
     },
 
     async fetchNotes() {
@@ -48,7 +55,7 @@ export const useStoreNotes = defineStore("storeNotes", {
       //   console.log(doc.id, ' => ', doc.data());
       //   let note = {
       //     id: doc.id,
-      //     content: doc.data().content 
+      //     content: doc.data().content
       //   }
       //   this.notes.push(note);
       // });
@@ -58,15 +65,14 @@ export const useStoreNotes = defineStore("storeNotes", {
         querySnapshot.forEach((doc) => {
           let note = {
             id: doc.id,
-            content: doc.data().content 
-          }
+            content: doc.data().content,
+          };
           notes.push(note);
         });
         this.notes = notes;
       });
-    }
+    },
     // later, want to stop listening to changes
-
   },
   getters: {
     getNoteContentById: (state) => {
