@@ -14,8 +14,19 @@ onClickOutside(navbarMenuRef, () => {
 }, {
   ignore: [navbarBurgerRef],
 });
+/**
+ * store auth
+ */
+import { useStoreAuth } from "@/stores/storeAuth";
+const storeAuth = useStoreAuth();
 
-
+/**
+ * logout
+ */
+const logout = () => {
+  storeAuth.logout();
+  showMobileNav.value = false;
+};
 </script>
 <template>
   <nav
@@ -48,7 +59,12 @@ onClickOutside(navbarMenuRef, () => {
         class="navbar-menu"
         :class="{ 'is-active': showMobileNav }"
         ref="navbarMenuRef"
-      >
+      > 
+        <div class="nav-start">
+          <button v-if="storeAuth.user.id" @click="logout" class="button is-small is-success mt-3 ml-3">
+            Logout {{ storeAuth.user.email }}
+          </button>
+        </div>
         <div class="navbar-end">
           <router-link @click="showMobileNav = !showMobileNav" to="/" class="navbar-item" active-class="is-active"
             >Notes</router-link
