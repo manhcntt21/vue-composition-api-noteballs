@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/js/firebase";
-import { collection, onSnapshot, setDoc, doc } from "firebase/firestore";
+import { collection, onSnapshot, setDoc, doc, deleteDoc } from "firebase/firestore";
 
 const notesCollectionRef = collection(db, 'notes')
 
@@ -23,8 +23,10 @@ export const useStoreNotes = defineStore("storeNotes", {
       });
     },
 
-    deleteNoteById(id) {
-      this.notes = this.notes.filter((note) => note.id !== id);
+    async deleteNoteById(id) {
+      // this.notes = this.notes.filter((note) => note.id !== id);
+      console.log(id);
+      await deleteDoc(doc(notesCollectionRef, id));
     },
 
     // editNoteById(id) {

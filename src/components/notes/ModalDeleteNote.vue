@@ -13,11 +13,10 @@
       <footer class="modal-card-foot is-justify-content-flex-end">
         <div class="buttons">
           <button @click="closeModal" class="button">Cancel</button>
-          <button @click="storeNotes.deleteNoteById(notedId)" class="button is-danger">Delete</button>
+          <button @click="storeNotes.deleteNoteById(props.noteId)" class="button is-danger">Delete</button>
         </div>
       </footer>
     </div>
-    {{ noteId }}
   </div>
 </template>
 <script setup>
@@ -26,7 +25,7 @@
  */
 import { onClickOutside } from "@vueuse/core";
 import { ref, onMounted, onUnmounted } from "vue";
-
+import { useStoreNotes } from "@/stores/storeNotes";
 
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
@@ -34,6 +33,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["update:modelValue"]);
+const storeNotes = useStoreNotes();
 /**
  * close modal
  */
