@@ -1,21 +1,12 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
+import { db } from "@/js/firebase";
+import { collection, getDocs } from "firebase/firestore";
 
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
     return {
-      notes: [
-        {
-          id: "1",
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Praesentium adipisci, odit saepe sequi rem animi odio? Vitae sequi ea dolorum laboriosam a, quos, amet animi, esse id nobis vel ad.",
-        },
-        {
-          id: "2",
-          content:
-            "Hi, I'm a note! You can edit me by clicking on the pencil icon on the right. You can also delete me by clicking on the trash icon. You can add a new note by clicking on the plus icon at the bottom.",
-        },
-      ],
+      notes: [],
     };
   },
 
@@ -41,8 +32,20 @@ export const useStoreNotes = defineStore("storeNotes", {
       if (note) {
         note.content = playload.content;
       }
-    }
+    },
 
+    async fetchNotes() {
+      console.log("fetchNotes");
+      const querySnapshot = await getDocs(collection(db, 'notes'));
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, ' => ', doc.data());
+        let note = {
+          id: doc.id,
+          content: doc.data().content 
+        }
+        this.notes.push(note);
+      });
+    }
   },
   getters: {
     getNoteContentById: (state) => {
