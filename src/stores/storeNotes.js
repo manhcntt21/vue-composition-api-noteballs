@@ -10,10 +10,11 @@ import {
   updateDoc,
   orderBy,
   query,
+  addDoc,
 } from "firebase/firestore";
 
 const notesCollectionRef = collection(db, "notes");
-const notesCollectionQuery = query(notesCollectionRef, orderBy("id", "desc"));
+const notesCollectionQuery = query(notesCollectionRef, orderBy("date", "desc"));
 
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
@@ -28,11 +29,13 @@ export const useStoreNotes = defineStore("storeNotes", {
       //   id: uuidv4(),
       //   content: newNodeContent,
       // });
-      let currentDate = new Date().getTime(), id = currentDate.toString();
-      await setDoc(doc(notesCollectionRef, id), {
+      let currentDate = new Date().getTime(),
+        date = currentDate.toString();
+      await addDoc(notesCollectionRef, {
         content: newNodeContent,
-        id
+        date,
       });
+      console.log(this.notes);
     },
 
     async deleteNoteById(id) {
@@ -71,6 +74,7 @@ export const useStoreNotes = defineStore("storeNotes", {
           let note = {
             id: doc.id,
             content: doc.data().content,
+            date: doc.data().date,
           };
           notes.push(note);
         });
