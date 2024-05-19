@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { v4 as uuidv4 } from "uuid";
 import { db } from "@/js/firebase";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, onSnapshot } from "firebase/firestore";
 
 export const useStoreNotes = defineStore("storeNotes", {
   state: () => {
@@ -36,16 +36,30 @@ export const useStoreNotes = defineStore("storeNotes", {
 
     async fetchNotes() {
       console.log("fetchNotes");
-      const querySnapshot = await getDocs(collection(db, 'notes'));
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, ' => ', doc.data());
-        let note = {
-          id: doc.id,
-          content: doc.data().content 
-        }
-        this.notes.push(note);
+      // const querySnapshot = await getDocs(collection(db, 'notes'));
+      // querySnapshot.forEach((doc) => {
+      //   console.log(doc.id, ' => ', doc.data());
+      //   let note = {
+      //     id: doc.id,
+      //     content: doc.data().content 
+      //   }
+      //   this.notes.push(note);
+      // });
+
+      onSnapshot(collection(db, 'notes'), (querySnapshot) => {
+        let notes = [];
+        querySnapshot.forEach((doc) => {
+          let note = {
+            id: doc.id,
+            content: doc.data().content 
+          }
+          notes.push(note);
+        });
+        this.notes = notes;
       });
     }
+    // later, want to stop listening to changes
+
   },
   getters: {
     getNoteContentById: (state) => {
