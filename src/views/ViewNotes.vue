@@ -11,12 +11,21 @@
         </button>
       </template>
     </add-edit-note>
-    <note
-      v-for="note in storeNotes.notes"
-      :key="note.id"
-      :note="note"
-      @delete-clicked="handleDeleteClicked"
-    />
+    <progress
+      v-if="!storeNotes.notesLoaded"
+      class="progress is-success"
+      max="100"
+    >
+      30%
+    </progress>
+    <template v-else>
+      <note
+        v-for="note in storeNotes.notes"
+        :key="note.id"
+        :note="note"
+        @delete-clicked="handleDeleteClicked"
+      />
+    </template>
   </div>
 </template>
 <script setup>
