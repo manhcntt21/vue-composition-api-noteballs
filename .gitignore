@@ -33,3 +33,4 @@ coverage
 firebase.json
 .firebaserc
 hosting.*
+firebase.js
