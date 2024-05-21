@@ -25,6 +25,7 @@ export const useStoreNotes = defineStore("storeNotes", {
   },
 
   actions: {
+    // 0lhTFyZHjRUa7ybbPmqHNPWVf1D2
     init() {
       const storeAuth = useStoreAuth();
       // console.log(storeAuth.user.id);
@@ -99,6 +100,8 @@ export const useStoreNotes = defineStore("storeNotes", {
 
         this.notes = notes;
         this.notesLoaded = true;
+      }, error => {
+        console.log("error.message", error.message);
       });
     },
     
